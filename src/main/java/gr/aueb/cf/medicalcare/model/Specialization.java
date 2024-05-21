@@ -29,17 +29,17 @@ public class Specialization extends AbstractEntity  {
     // The description of the specialization.
     private String description;
 
-    // The constructor of the class with the required fields.
-    public Specialization(String specializationName, String description, boolean isActive) {
-        this.specializationName = specializationName;
-        this.description = description;
-        this.setIsActive(isActive);
-    }
 
     // The doctors that have this specialization.
-    @OneToMany(mappedBy = "specialization", fetch = FetchType.EAGER)
-    @Getter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "specialization")
+    @Getter(AccessLevel.PROTECTED)
     private Set<Doctor> doctors = new HashSet<>();
+
+    // The constructor of the class with the required fields.
+    public Specialization(String specializationName, String description, Boolean isActive) {
+        this.specializationName = specializationName;
+        this.setIsActive(isActive);
+    }
 
     public void addDoctor(Doctor doctor) {
         this.doctors.add(doctor);

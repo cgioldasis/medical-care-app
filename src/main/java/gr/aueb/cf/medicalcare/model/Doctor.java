@@ -23,16 +23,16 @@ public class Doctor extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     //  The personal details of the staff member.
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "personal_details_id", referencedColumnName = "id")
     private PersonalDetails personalDetails;
 
     //  The specialization of the staff member.
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "specialization_id", referencedColumnName = "id")
     private Specialization specialization;
 
@@ -49,4 +49,19 @@ public class Doctor extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "treatment_id")
     )
     private Set<Treatment> treatments = new HashSet<>();
+
+    public void addUser(User user) {
+        this.user = user;
+        user.setDoctor(this);
+    }
+
+    public void addPersonalDetails(PersonalDetails personalDetails) {
+        this.personalDetails = personalDetails;
+        personalDetails.setDoctor(this);
+    }
+
+    public void addSpecialization(Specialization specialization) {
+        this.specialization = specialization;
+        specialization.addDoctor(this);
+    }
 }

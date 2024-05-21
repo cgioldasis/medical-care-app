@@ -1,6 +1,5 @@
 package gr.aueb.cf.medicalcare.service;
 
-import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
@@ -9,7 +8,6 @@ import gr.aueb.cf.medicalcare.model.User;
 import gr.aueb.cf.medicalcare.repository.UserRepository;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
-import gr.aueb.cf.medicalcare.validator.UserValidator;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +30,7 @@ public class UserServiceImpl implements IUserService {
 
     // Injecting the UserRepository
     private final UserRepository userRepository;
-    // Injecting the RegisterUserValidator
-    private final UserValidator registerUserValidator;
+
 
     /**
      * Get a user by username

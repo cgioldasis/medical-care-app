@@ -1,6 +1,7 @@
 package gr.aueb.cf.medicalcare.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 /**
@@ -11,6 +12,7 @@ import lombok.*;
 @Entity
 @AllArgsConstructor
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "users")
@@ -26,10 +28,15 @@ public class User extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
     // The username of the user.
+    @Size(min = 3, max = 20)
+    @NonNull
     private String username;
     // The password of the user.
+    @Column(length = 255)
+    @NonNull
     private String password;
     // The email of the user.
+    @NonNull
     private String email;
     // The Doctor associated with this user.
     @OneToOne(mappedBy = "user")
@@ -50,6 +57,7 @@ public class User extends AbstractEntity {
         this.password = password;
         this.email = email;
     }
+
 
     /**
      * Getting a new user with the doctor role.

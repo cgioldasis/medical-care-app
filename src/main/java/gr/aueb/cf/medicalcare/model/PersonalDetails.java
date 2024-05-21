@@ -66,4 +66,6 @@ public class PersonalDetails extends AbstractEntity {
         this.birthdate = birthdate;
         this.phone = phone;
     }
+
+
 }
