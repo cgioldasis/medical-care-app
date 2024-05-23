@@ -7,6 +7,7 @@ import gr.aueb.cf.medicalcare.model.Doctor;
 import gr.aueb.cf.medicalcare.model.PersonalDetails;
 import gr.aueb.cf.medicalcare.model.Specialization;
 import gr.aueb.cf.medicalcare.model.User;
+import gr.aueb.cf.medicalcare.security.SecUtil;
 
 import java.util.Date;
 
@@ -32,19 +33,15 @@ public class DoctorMapper {
         return personalDetails;
     }
 
-    /**
-     * Extracts a doctor from a DoctorRegisterDTO.
-     * @param dto The DoctorRegisterDTO
-     * @param personalDetails The PersonalDetails of the Doctor
+/**
+     * Extracts a doctor from a DoctorUpdateDTO.
+     * @param dto The DoctorUpdateDTO
      * @return The Doctor
      */
-    public static PersonalDetails extractPersonalDetailsFromDoctorUpdateDTO(
-            DoctorUpdateDTO dto, PersonalDetails personalDetails) {
-        personalDetails.setFirstname(dto.getFirstname());
-        personalDetails.setLastname(dto.getLastname());
-        personalDetails.setSsid(dto.getSsid());
-        personalDetails.setGender(dto.getGender());
-        personalDetails.setPhone(dto.getPhone());
+    public static PersonalDetails extractPersonalDetailsFromDoctorUpdateDTO(DoctorUpdateDTO dto) {
+        PersonalDetails personalDetails = new PersonalDetails(dto.getSsid(), dto.getFirstname(), dto.getLastname(),
+                dto.getGender(), new Date(), dto.getPhone());
+        personalDetails.setIsActive(true);
         return personalDetails;
     }
 
@@ -55,21 +52,19 @@ public class DoctorMapper {
      * @return      The User
      */
     public static User extractUserFromDoctorRegisterDTO(DoctorRegisterDTO dto) {
-        User user = User.getNewUserWithDoctorRole(dto.getUsername(), dto.getPassword(), dto.getEmail());
+        User user = User.getNewUserWithDoctorRole(dto.getUsername(), SecUtil.hashPassword(dto.getPassword()), dto.getEmail());
         user.setIsActive(true);
         return user;
     }
 
-    /**
+/**
      * Extract a user from a DoctorUpdateDTO.
      * @param dto   The DoctorUpdateDTO
-     * @param user  The User
      * @return      The User
      */
-    public static User extractUserFromDoctorUpdateDTO(DoctorUpdateDTO dto, User user) {
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        user.setEmail(dto.getEmail());
+    public static User extractUserFromDoctorUpdateDTO(DoctorUpdateDTO dto) {
+        User user = User.getNewUserWithDoctorRole(dto.getUsername(), SecUtil.hashPassword(dto.getPassword()), dto.getEmail());
+        user.setIsActive(true);
         return user;
     }
 
@@ -79,19 +74,16 @@ public class DoctorMapper {
      * @return      The Specialization
      */
     public static Specialization extractSpecializationFromDoctorRegisterDTO(DoctorRegisterDTO dto) {
-        return new Specialization(dto.getSpecializationName(), null, true);
+        return new Specialization(dto.getSpecializationName(), dto.getDescription(), true);
     }
 
-    /**
+/**
      * Extract a specialization from a DoctorUpdateDTO.
      * @param dto   The DoctorUpdateDTO
-     * @param specialization The Specialization
      * @return      The Specialization
      */
-    public static Specialization extractSpecializationFromDoctorUpdateDTO(DoctorUpdateDTO dto, Specialization specialization) {
-        specialization.setSpecializationName(dto.getSpecializationName());
-        specialization.setDescription(dto.getDescription());
-        return specialization;
+    public static Specialization extractSpecializationFromDoctorUpdateDTO(DoctorUpdateDTO dto) {
+        return new Specialization(dto.getSpecializationName(), dto.getDescription(), true);
     }
 
     /**
@@ -99,8 +91,8 @@ public class DoctorMapper {
      * @param doctor The Doctor
      * @return The DoctorReadOnlyDTO
      */
-    public static DoctorReadOnlyDTO extractDoctorReadOnlyDTOFromDoctorRegisterDTO(Doctor doctor) {
-        return new DoctorReadOnlyDTO(doctor.getId(), doctor.getUser().getUsername(), doctor.getUser().getPassword(),
+    public static DoctorReadOnlyDTO extractDoctorReadOnlyDTOFromDoctor(Doctor doctor) {
+        return new DoctorReadOnlyDTO(doctor.getId(), doctor.getUser().getUsername(),
                 doctor.getUser().getEmail(), doctor.getPersonalDetails().getFirstname(),
                 doctor.getPersonalDetails().getLastname(), doctor.getPersonalDetails().getSsid(),
                 doctor.getSpecialization().getSpecializationName(), doctor.getSpecialization().getDescription(),

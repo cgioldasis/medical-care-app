@@ -1,4 +1,4 @@
-package gr.aueb.cf.medicalcare.service;
+package gr.aueb.cf.medicalcare.service.Doctor;
 
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorUpdateDTO;
@@ -13,7 +13,6 @@ import gr.aueb.cf.medicalcare.security.SecUtil;
 import gr.aueb.cf.medicalcare.service.exception.DoctorNotFoundException;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+
+/**
+ * The DoctorServiceImpl class.
+ */
+
 @Service
 @Slf4j
 @Transactional
@@ -63,6 +67,7 @@ public class DoctorServiceImpl implements IDoctorService {
             if (doctors.isEmpty()) {
                 throw new DoctorNotFoundException("Doctor with lastname: " + lastname + " not found");
             }
+            log.info("The list of doctors with lastname: " + lastname + " found successfully");
             return doctors;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -87,6 +92,12 @@ public class DoctorServiceImpl implements IDoctorService {
         }
     }
 
+    /**
+     * Get doctors by specialization
+     * @param specializationName         The specialization name
+     * @return                          The list of doctors
+     * @throws DoctorNotFoundException    If no doctors are found
+     */
     @Override
     public List<Doctor> getDoctorsBySpecialization(String specializationName) throws DoctorNotFoundException {
         List<Doctor> doctors = new ArrayList<>();
@@ -95,10 +106,32 @@ public class DoctorServiceImpl implements IDoctorService {
             if (doctors.isEmpty()) {
                 throw new DoctorNotFoundException("Doctor with specialization: " + specializationName + " not found");
             }
+            log.info("The list of doctors with specialization: {} found successfully", specializationName);
             return doctors;
         } catch (Exception e) {
             log.error(e.getMessage());
             throw e;
+        }
+    }
+
+    /**
+     * Get all doctors
+     * @return                          The list of all doctors
+     * @throws DoctorNotFoundException    If no doctors are found
+     */
+    @Override
+    public List<Doctor> getAllDoctors() throws DoctorNotFoundException {
+        List<Doctor> doctors = new ArrayList<>();
+        try {
+            doctors = doctorRepository.findAll();
+            if (doctors.isEmpty()) {
+                throw new DoctorNotFoundException("No doctors are registered in the system");
+            }
+            log.info("The list of all doctors found successfully");
+            return doctors;
+        } catch (DoctorNotFoundException e) {
+            log.error("No doctors found");
+            throw  e;
         }
     }
 
@@ -139,6 +172,7 @@ public class DoctorServiceImpl implements IDoctorService {
             log.info("Doctor added");
             return doctor;
         } catch (EntityAlreadyExistsException e) {
+            log.error(e.getMessage());
             throw e;
         }
     }
@@ -152,26 +186,28 @@ public class DoctorServiceImpl implements IDoctorService {
     @Override
     public Doctor updateDoctor(DoctorUpdateDTO dto) throws DoctorNotFoundException {
         Doctor doctor;
-        User user;
-        Specialization specialization;
-        PersonalDetails personalDetails;
+        User updatedUser = new User();
+        PersonalDetails updatedPersonalDetails = new PersonalDetails();
+        Specialization updatedSpecialization = new Specialization();
         try {
             doctor = doctorRepository.findById(dto.getId()).orElseThrow(() ->
                     new DoctorNotFoundException("Doctor with id: " + dto.getId() + " not found"));
-            user = doctor.getUser();
-            specialization = doctor.getSpecialization();
-            personalDetails = doctor.getPersonalDetails();
 
-            doctor.addUser(DoctorMapper.extractUserFromDoctorUpdateDTO(dto, user));
-            doctor.addPersonalDetails(DoctorMapper.extractPersonalDetailsFromDoctorUpdateDTO(dto, personalDetails));
-            specialization = DoctorMapper.extractSpecializationFromDoctorUpdateDTO(dto, specialization);
+            updatedUser = DoctorMapper.extractUserFromDoctorUpdateDTO(dto);
+            updatedPersonalDetails = DoctorMapper.extractPersonalDetailsFromDoctorUpdateDTO(dto);
+            updatedSpecialization = DoctorMapper.extractSpecializationFromDoctorUpdateDTO(dto);
             if (specializationRepository.findSpecializationBySpecializationName(
-                    specialization.getSpecializationName()).isPresent()) {
-                specialization = specializationRepository.findSpecializationBySpecializationName(
-                        specialization.getSpecializationName()).get();
+                    updatedSpecialization.getSpecializationName()).isPresent()) {
+                updatedSpecialization = specializationRepository.findSpecializationBySpecializationName(
+                        updatedSpecialization.getSpecializationName()).get();
             }
 
-            doctor.addSpecialization(specialization);
+            updatedUser.setId(doctor.getUser().getId());
+            updatedPersonalDetails.setId(doctor.getPersonalDetails().getId());
+
+            doctor.addSpecialization(updatedSpecialization);
+            doctor.addUser(updatedUser);
+            doctor.addPersonalDetails(updatedPersonalDetails);
             doctorRepository.save(doctor);
             log.info("Doctor updated");
             return doctor;
@@ -184,13 +220,55 @@ public class DoctorServiceImpl implements IDoctorService {
 
     }
 
+    /**
+     * Delete a doctor
+     * @param id                        The id of the doctor
+     * @return                          The doctor
+     * @throws DoctorNotFoundException    If the doctor is not found
+     */
     @Override
-    public Doctor deleteDoctor(Long id) {
-        return null;
+    public Doctor deleteDoctor(Long id) throws DoctorNotFoundException {
+        Doctor doctor;
+        try {
+            doctor = doctorRepository.findById(id).orElseThrow(() ->
+                    new DoctorNotFoundException("Doctor with id: " + id + " not found"));
+            doctorRepository.deleteById(id);
+            log.info("Doctor deleted");
+            return doctor;
+        } catch (DoctorNotFoundException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 
     @Override
+public Long countAllDoctors() {
+        Long count;
+        try {
+            count = doctorRepository.count();
+            log.info("The number of doctors is {}", count);
+            return count;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+    }
+
+    /**
+     * Count all doctors with a specific specialization
+     * @param specializationName         The specialization name
+     * @return                          The number of doctors
+     */
+    @Override
     public Long countDoctorsBySpecialization(String specializationName) {
-        return 0L;
+        Long count;
+        try {
+            count = doctorRepository.countDoctorBySpecializationSpecializationName(specializationName);
+            log.info("The number of doctors with specialization: {} is {}", specializationName, count);
+            return count;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 }

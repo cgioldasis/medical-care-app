@@ -5,7 +5,7 @@ import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
 import gr.aueb.cf.medicalcare.model.User;
-import gr.aueb.cf.medicalcare.service.IUserService;
+import gr.aueb.cf.medicalcare.service.User.IUserService;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
 import gr.aueb.cf.medicalcare.validator.UserValidator;

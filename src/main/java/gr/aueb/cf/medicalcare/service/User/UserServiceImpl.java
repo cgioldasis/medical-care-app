@@ -1,4 +1,4 @@
-package gr.aueb.cf.medicalcare.service;
+package gr.aueb.cf.medicalcare.service.User;
 
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;

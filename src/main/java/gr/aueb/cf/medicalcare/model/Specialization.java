@@ -38,6 +38,7 @@ public class Specialization extends AbstractEntity  {
     // The constructor of the class with the required fields.
     public Specialization(String specializationName, String description, Boolean isActive) {
         this.specializationName = specializationName;
+        this.description = description;
         this.setIsActive(isActive);
     }
 

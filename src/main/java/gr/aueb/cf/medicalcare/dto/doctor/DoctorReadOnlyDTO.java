@@ -16,8 +16,6 @@ public class DoctorReadOnlyDTO extends BaseDTO {
     // the given username from the register form.
     private String username;
     // the given password from the register form.
-    private String password;
-    // the given email from the register form.
     private String email;
     // the given firstname from the register form.
     private String firstname;
@@ -48,13 +46,12 @@ public class DoctorReadOnlyDTO extends BaseDTO {
      * @param gender the gender of the doctor.
      * @param phone the phone of the doctor.
      */
-    public DoctorReadOnlyDTO(@NotNull Long id, String email, String username, String password, String firstname,
+    public DoctorReadOnlyDTO(@NotNull Long id, String username, String email, String firstname,
                              String lastname, String ssid, String specializationName, String description,
                              String gender, String phone) {
         super(id);
-        this.email = email;
         this.username = username;
-        this.password = password;
+        this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
         this.ssid = ssid;
