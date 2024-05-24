@@ -46,7 +46,7 @@ public class Medicine extends AbstractEntity {
 
     //  The treatment associated with this medicine.
     @ManyToMany(mappedBy = "medicines")
-    @Getter(AccessLevel.PRIVATE)
+    @Getter(AccessLevel.PROTECTED)
     private Set<Treatment> treatments = new HashSet<>();
 
 }

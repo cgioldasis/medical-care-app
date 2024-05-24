@@ -25,6 +25,8 @@ public class Patient extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // The disease of the patient.
+    private String diseaseDescription;
 
     // Personal details of the patient.
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -32,7 +34,6 @@ public class Patient extends AbstractEntity {
     private PersonalDetails personalDetails;
 
     //  Staff assigned to the patient.
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;

@@ -184,6 +184,7 @@ public class DoctorServiceImpl implements IDoctorService {
      * @throws DoctorNotFoundException    If the doctor is not found
      */
     @Override
+    @Transactional
     public Doctor updateDoctor(DoctorUpdateDTO dto) throws DoctorNotFoundException {
         Doctor doctor;
         User updatedUser = new User();
@@ -242,7 +243,7 @@ public class DoctorServiceImpl implements IDoctorService {
     }
 
     @Override
-public Long countAllDoctors() {
+    public Long countAllDoctors() {
         Long count;
         try {
             count = doctorRepository.count();

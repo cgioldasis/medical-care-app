@@ -43,9 +43,6 @@ public class Treatment extends AbstractEntity {
     @Getter(AccessLevel.PROTECTED)
     private Set<Doctor> doctors = new HashSet<>();
 
-    //  The dose of the medicine for the treatment.
-    @NonNull
-    private String dose;
 
     //  The start date of the treatment.
     @NonNull
@@ -62,4 +59,21 @@ public class Treatment extends AbstractEntity {
     @OneToMany(mappedBy = "treatment")
     @Getter(AccessLevel.PROTECTED)
     private Set<Patient> patients = new HashSet<>();
+
+    public Treatment(@NonNull String treatmentName, @NonNull LocalDate startTreatment, @NonNull LocalDate endTreatment) {
+        this.treatmentName = treatmentName;
+        this.startTreatment = startTreatment;
+        this.endTreatment = endTreatment;
+    }
+
+
+    public void addMedicine(Medicine medicine) {
+        this.medicines.add(medicine);
+        medicine.getTreatments().add(this);
+    }
+
+    public void addDoctor(Doctor doctor) {
+        this.doctors.add(doctor);
+        doctor.getTreatments().add(this);
+    }
 }
