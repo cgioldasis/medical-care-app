@@ -32,7 +32,7 @@ public class Doctor extends AbstractEntity {
     private PersonalDetails personalDetails;
 
     //  The specialization of the staff member.
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "specialization_id", referencedColumnName = "id")
     private Specialization specialization;
 
@@ -42,12 +42,8 @@ public class Doctor extends AbstractEntity {
     private Set<Patient> patients = new HashSet<>();
 
     //  The treatments assigned to the staff member.
-    @ManyToMany
-    @JoinTable(
-            name = "doctor_treatments",
-            joinColumns = @JoinColumn(name = "doctor_id"),
-            inverseJoinColumns = @JoinColumn(name = "treatment_id")
-    )
+    @OneToMany(mappedBy = "doctor")
+    @Getter(AccessLevel.PROTECTED)
     private Set<Treatment> treatments = new HashSet<>();
 
     public void addUser(User user) {
@@ -63,5 +59,10 @@ public class Doctor extends AbstractEntity {
     public void addSpecialization(Specialization specialization) {
         this.specialization = specialization;
         specialization.addDoctor(this);
+    }
+
+    public void addTreatment(Treatment treatment) {
+        this.treatments.add(treatment);
+        treatment.setDoctor(this);
     }
 }

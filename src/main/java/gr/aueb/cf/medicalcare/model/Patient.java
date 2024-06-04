@@ -43,13 +43,12 @@ public class Patient extends AbstractEntity {
     @JoinColumn(name = "bed_id", referencedColumnName = "id")
     private Bed bed;
 
-    //  Admission details of the patient.
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "admission_id", referencedColumnName = "id")
-    private Admission admission;
+//    //  Admission details of the patient.
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "admission_id", referencedColumnName = "id")
+//    private Admission admission;
 
     //  Treatment details for the patient.
-    @ManyToOne
-    @JoinColumn(name = "treatment_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "patient")
     private Treatment treatment;
 }

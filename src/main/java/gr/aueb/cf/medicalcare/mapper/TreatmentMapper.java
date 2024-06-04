@@ -19,6 +19,6 @@ public class TreatmentMapper {
     }
 
     public static Medicine extractMedicinesFromDTO(TreatmentRegisterDTO treatmentRegisterDTO) {
-        return
+        return null;
     }
 }

@@ -1,8 +1,15 @@
 package gr.aueb.cf.medicalcare.model;
 
+import gr.aueb.cf.medicalcare.security.CustomUserDetails;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A class representing a user in the hospital management system.
@@ -15,9 +22,11 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "users")
-public class User extends AbstractEntity {
-    // The unique identifier of the entities.
+@Table(name = "users", indexes = {
+        @Index(name = "username_index", columnList = "username", unique = true)
+})
+public class User extends AbstractEntity implements CustomUserDetails {
+    // The unique identifier of the entities.    status: any;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -77,7 +86,7 @@ public class User extends AbstractEntity {
      * @return          The new user with the admin role.
      */
     public static User getNewUserWithAdminRole(String username, String password, String email) {
-        return new User(Role.ADMIN, Status.APPROVED,
+        return new User(Role.ADMIN, Status.PENDING,
                 username, password, email);
     }
 
@@ -85,6 +94,26 @@ public class User extends AbstractEntity {
      * toString method for the User class.
      * @return      The string representation of the User class.
      */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.getIsActive() == null || this.getIsActive();
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -94,5 +123,15 @@ public class User extends AbstractEntity {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public Status getStatus() {
+        return status;
     }
 }

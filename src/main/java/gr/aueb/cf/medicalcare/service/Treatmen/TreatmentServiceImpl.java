@@ -1,5 +1,6 @@
 package gr.aueb.cf.medicalcare.service.Treatmen;
 
+import gr.aueb.cf.medicalcare.dto.AuthenticationResponse;
 import gr.aueb.cf.medicalcare.dto.treatment.TreatmentRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.treatment.TreatmentUpdateDTO;
 import gr.aueb.cf.medicalcare.mapper.TreatmentMapper;
@@ -9,10 +10,12 @@ import gr.aueb.cf.medicalcare.model.Treatment;
 import gr.aueb.cf.medicalcare.repository.DoctorRepository;
 import gr.aueb.cf.medicalcare.repository.MedicineRepository;
 import gr.aueb.cf.medicalcare.repository.TreatmentRepository;
+import gr.aueb.cf.medicalcare.security.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +33,8 @@ public class TreatmentServiceImpl implements ITreatmentService{
     private final TreatmentRepository treatmentRepository;
     private final DoctorRepository doctorRepository;
     private final MedicineRepository medicineRepository;
+    private final JwtUtil jwtUtil;
+
 
 
     @Override
@@ -71,7 +76,7 @@ public class TreatmentServiceImpl implements ITreatmentService{
                 throw new EntityNotFoundException("Treatments with medicine " + medicineName + " not found");
             }
             log.info("Treatments with medicine {} found", medicineName);
-            return treatments
+            return treatments;
         } catch (EntityNotFoundException e) {
             log.error(e.getMessage());
             throw e;
@@ -110,22 +115,23 @@ public class TreatmentServiceImpl implements ITreatmentService{
         }
     }
 
+
     @Transactional
     @Override
-    public Treatment insertTreatment(TreatmentRegisterDTO dto) {
+    public Treatment insertTreatment(TreatmentRegisterDTO dto, String token) {
         Treatment treatment;
         Doctor doctor;
         Medicine medicine;
         try {
-            doctor = doctorRepository.findDoctorByPersonalDetailsSsid(dto.getDoctorSsid()).orElseThrow(() ->
-                    new EntityNotFoundException("Doctor with ssid: " + dto.getDoctorSsid() + " not found"));
+            doctor = doctorRepository.findDoctorByUserUsername(jwtUtil.extractUsername(token)).orElseThrow(() ->
+                    new EntityNotFoundException("Doctor with SSID: " + jwtUtil.extractUsername(token) + " not found"));
             treatment = TreatmentMapper.extractTreatmentFromDTO(dto);
             for (String medicineName : dto.getMedicineNames()) {
                 medicine = medicineRepository.findMedicineByMedicineName(medicineName).orElseThrow(() ->
                         new EntityNotFoundException("Medicine with name: " + medicineName + " not found"));
                 treatment.addMedicine(medicine);
             }
-            treatment.addDoctor(doctor);
+            doctor.addTreatment(treatment);
             treatmentRepository.save(treatment);
             log.info("Treatment with name: {} was added at {}", treatment.getTreatmentName(), LocalDateTime.now());
             return treatment;
@@ -144,4 +150,5 @@ public class TreatmentServiceImpl implements ITreatmentService{
     public Treatment deleteTreatment(Long id) {
         return null;
     }
+
 }

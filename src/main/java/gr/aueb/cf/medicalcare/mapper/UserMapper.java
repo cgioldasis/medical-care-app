@@ -4,9 +4,7 @@ import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.model.User;
-import gr.aueb.cf.medicalcare.security.SecUtil;
-
-import java.time.LocalDateTime;
+import gr.aueb.cf.medicalcare.util.SecUtil;
 
 /**
  * Mapper class for User objects
@@ -19,13 +17,15 @@ public class UserMapper {
      */
     private UserMapper() {}
 
+
+
     /**
      * Maps a UserRegisterDTO to a User object
      * @param dto   UserRegisterDTO
      * @return      User
      */
     public static User registerUserMapper(UserRegisterDTO dto) {
-        User user = User.getNewUserWithAdminRole(dto.getUsername(), SecUtil.hashPassword(dto.getPassword()), dto.getEmail());
+        User user = User.getNewUserWithAdminRole(dto.getUsername(), dto.getPassword(), dto.getEmail());
         user.setIsActive(true);
         return user;
     }

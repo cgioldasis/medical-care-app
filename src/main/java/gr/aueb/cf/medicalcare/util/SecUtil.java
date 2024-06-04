@@ -1,4 +1,4 @@
-package gr.aueb.cf.medicalcare.security;
+package gr.aueb.cf.medicalcare.util;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -7,6 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class SecUtil {
     private SecUtil() {}
+
 
     public static boolean checkPassword(String inputPasswd, String storedHashedPasswd) {
         return BCrypt.checkpw(inputPasswd, storedHashedPasswd);

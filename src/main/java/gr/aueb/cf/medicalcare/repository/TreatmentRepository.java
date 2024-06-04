@@ -16,7 +16,7 @@ public interface TreatmentRepository extends JpaRepository<Treatment, Long> {
     List<Treatment> findTreatmentsByMedicineName(@Param("medicineName") String medicineName);
 
     // Find all treatments by a specific doctor's ssid.
-    @Query("SELECT t From Treatment t JOIN t.doctors d where d.personalDetails = (" +
+    @Query("SELECT t From Treatment t JOIN t.doctor d where d.personalDetails = (" +
             "select p from PersonalDetails p where p.ssid = :ssid)")
     List<Treatment> findTreatmentsByDoctorPersonalDetailsLastname(@Param("ssid") String ssid);
 }

@@ -11,6 +11,8 @@ import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +32,8 @@ public class UserServiceImpl implements IUserService {
 
     // Injecting the UserRepository
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     /**
@@ -98,12 +102,14 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public User registerNewAdminUser(UserRegisterDTO dto) throws EntityAlreadyExistsException {
-        User userAdmin;
+        User userAdmin = new User();
         try {
             if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
                 throw new EntityAlreadyExistsException(User.class, dto.getUsername());
             }
-            userAdmin = userRepository.save(UserMapper.registerUserMapper(dto));
+            userAdmin = UserMapper.registerUserMapper(dto);
+            userAdmin.setPassword(passwordEncoder.encode(dto.getPassword()));
+            userRepository.save(userAdmin);
             log.info("User with username: {} was added at {}", userAdmin.getUsername(), LocalDateTime.now());
         } catch (EntityAlreadyExistsException e) {
             log.error("{} at {}", e.getMessage(), LocalDateTime.now());

@@ -12,7 +12,9 @@ import java.util.Set;
  * Extends the AbstractEntity class, inheriting common properties like an identifier.
  */
 @Entity
-@Table(name = "treatments")
+@Table(name = "treatments", indexes = {
+        @Index(name = "treatment_name_index", columnList = "treatmentName", unique = true)
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -39,9 +41,9 @@ public class Treatment extends AbstractEntity {
     private Set<Medicine> medicines = new HashSet<>();
 
     //  The doctor prescribing the treatment.
-    @ManyToMany(mappedBy = "treatments")
-    @Getter(AccessLevel.PROTECTED)
-    private Set<Doctor> doctors = new HashSet<>();
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    private Doctor doctor;
 
 
     //  The start date of the treatment.
@@ -56,9 +58,8 @@ public class Treatment extends AbstractEntity {
 //    private Long duration = Duration.between(endTreatment, startTreatment).toDays();
 
     //  The patient receiving the treatment.
-    @OneToMany(mappedBy = "treatment")
-    @Getter(AccessLevel.PROTECTED)
-    private Set<Patient> patients = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Patient patient;
 
     public Treatment(@NonNull String treatmentName, @NonNull LocalDate startTreatment, @NonNull LocalDate endTreatment) {
         this.treatmentName = treatmentName;
@@ -72,8 +73,4 @@ public class Treatment extends AbstractEntity {
         medicine.getTreatments().add(this);
     }
 
-    public void addDoctor(Doctor doctor) {
-        this.doctors.add(doctor);
-        doctor.getTreatments().add(this);
-    }
 }

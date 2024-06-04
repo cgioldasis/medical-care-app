@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserRestController {
 
@@ -129,7 +129,7 @@ public class UserRestController {
                     content = @Content),
             @ApiResponse(responseCode = "503", description = "Service Unavailable",
                     content = @Content)})
-    @PostMapping("/user")
+    @PostMapping("/register")
     public ResponseEntity<UserReadOnlyDTO> registerUserAdmin(
             @Valid @RequestBody UserRegisterDTO registerDTO, BindingResult bindingResult) throws EntityAlreadyExistsException {
         userValidator.validate(registerDTO, bindingResult);

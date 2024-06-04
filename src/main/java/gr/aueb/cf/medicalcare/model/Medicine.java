@@ -13,7 +13,10 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "medicines")
+@Table(name = "medicines", indexes = {
+        @Index(name = "medicine_name_index", columnList = "medicineName", unique = true),
+        @Index(name = "active_substance_index", columnList = "activeSubstance", unique = true)
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

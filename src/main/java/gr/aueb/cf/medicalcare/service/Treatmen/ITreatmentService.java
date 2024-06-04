@@ -18,7 +18,7 @@ public interface ITreatmentService {
     // Getting all the treatments.
     List<Treatment> getAllTreatments();
     // Inserting a new treatment.
-    Treatment insertTreatment(TreatmentRegisterDTO dto);
+    Treatment insertTreatment(TreatmentRegisterDTO dto, String token);
     // Updating a treatment.
     Treatment updateTreatment(TreatmentUpdateDTO dto);
     // Deleting a treatment.

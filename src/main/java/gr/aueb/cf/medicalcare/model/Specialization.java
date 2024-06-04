@@ -11,7 +11,9 @@ import java.util.Set;
  */
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "specializations")
+@Table(name = "specializations", indexes = {
+        @Index(name = "specialization_name_index", columnList = "specializationName", unique = true)
+})
 @NoArgsConstructor
 @Getter
 @Setter

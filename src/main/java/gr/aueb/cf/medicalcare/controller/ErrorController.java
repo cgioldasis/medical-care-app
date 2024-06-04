@@ -1,6 +1,7 @@
 package gr.aueb.cf.medicalcare.controller;
 
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
+import gr.aueb.cf.medicalcare.service.exception.NotActiveUserException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,11 @@ public class ErrorController {
     @ExceptionHandler(value = { Exception.class })
     public ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
+
+    @ExceptionHandler(value = { NotActiveUserException.class })
+    public ResponseEntity<String> handleNotActiveUserException(NotActiveUserException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 
 
