@@ -1,5 +1,6 @@
 package gr.aueb.cf.medicalcare.controller;
 
+import gr.aueb.cf.medicalcare.dto.ResponseMessage;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
 import gr.aueb.cf.medicalcare.service.exception.NotActiveUserException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
@@ -41,8 +42,8 @@ public class ErrorController {
      * @return  Response entity
      */
     @ExceptionHandler(value = { Exception.class })
-    public ResponseEntity<String> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    public ResponseEntity<ResponseMessage> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseMessage(e.getMessage()));
     }
 
     @ExceptionHandler(value = { NotActiveUserException.class })

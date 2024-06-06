@@ -1,10 +1,12 @@
 package gr.aueb.cf.medicalcare.controller;
 
+import gr.aueb.cf.medicalcare.dto.ResponseMessage;
 import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
 import gr.aueb.cf.medicalcare.model.User;
+import gr.aueb.cf.medicalcare.repository.UserRepository;
 import gr.aueb.cf.medicalcare.service.User.IUserService;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
@@ -34,6 +36,7 @@ public class UserRestController {
 
     private final IUserService userService;
     private final UserValidator userValidator;
+    private final UserRepository userRepository;
 
     /**
      * Rest endpoint to get a user by username
@@ -215,5 +218,30 @@ public class UserRestController {
     @GetMapping("/users/count/all")
     public ResponseEntity<Long> countUsers() {
         return ResponseEntity.ok(userService.countUsers());
+    }
+
+
+    @GetMapping("/check-username/{username}")
+    public ResponseEntity<ResponseMessage> checkUsername(@PathVariable("username") String username) {
+
+        boolean validUsername = userRepository.findByUsername(username).isEmpty();
+        if (validUsername) {
+
+            return ResponseEntity.ok(new ResponseMessage("Username is available."));
+        } else {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Username is already taken!"));
+        }
+    }
+
+    @GetMapping("/check-email/{email}")
+    public ResponseEntity<ResponseMessage> checkEmail(@PathVariable("email") String email) {
+
+        boolean validEmail = userRepository.findByEmail(email).isEmpty();
+        if (validEmail) {
+
+            return ResponseEntity.ok(new ResponseMessage("Email is available."));
+        } else {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Email is already taken!"));
+        }
     }
 }

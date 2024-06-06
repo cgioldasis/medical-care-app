@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*") // Επιτρέπει όλα τα origins
 public class AuthenticationController {
 
     @Autowired

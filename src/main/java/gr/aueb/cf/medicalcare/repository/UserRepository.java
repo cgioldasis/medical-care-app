@@ -5,6 +5,7 @@ import gr.aueb.cf.medicalcare.model.Status;
 import gr.aueb.cf.medicalcare.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -23,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Long countByRole(Role role);
     // Count all active users by role.
     Long countByRoleAndStatus(Role role, Status status);
+    // Find a user by email.
+    Optional<User> findByEmail(String email);
 }

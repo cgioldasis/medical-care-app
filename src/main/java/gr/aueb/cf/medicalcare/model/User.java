@@ -22,9 +22,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "users", indexes = {
-        @Index(name = "username_index", columnList = "username", unique = true)
-})
+@Table(name = "users")
+
 public class User extends AbstractEntity implements CustomUserDetails {
     // The unique identifier of the entities.    status: any;
     @Id
