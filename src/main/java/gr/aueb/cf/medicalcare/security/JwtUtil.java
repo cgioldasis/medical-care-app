@@ -47,7 +47,7 @@ public class JwtUtil {
         public String generateToken(CustomUserDetails userDetails) {
         String role = userDetails.getAuthorities().iterator().next().getAuthority();
         String status = userDetails.getStatus().name();
-        return createToken(userDetails.getUsername(), role);
+        return "Bearer " + createToken(userDetails.getUsername(), role);
     }
 
     private String createToken(String subject, String role) {

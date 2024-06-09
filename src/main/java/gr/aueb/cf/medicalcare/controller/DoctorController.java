@@ -173,7 +173,7 @@ public class DoctorController {
      * @return                              The doctor
      * @throws EntityAlreadyExistsException If the doctor already exists
      */
-    @Operation(summary = "Add a user")
+    @Operation(summary = "Add a doctor")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Doctor created",
                     content = { @Content(mediaType = "application/json",
