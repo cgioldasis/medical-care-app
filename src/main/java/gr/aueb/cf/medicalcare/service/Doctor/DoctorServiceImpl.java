@@ -16,6 +16,8 @@ import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ public class DoctorServiceImpl implements IDoctorService {
     private final DoctorRepository doctorRepository;
 
     private final SpecializationRepository specializationRepository;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
      * Get a doctor by username
@@ -155,7 +159,7 @@ public class DoctorServiceImpl implements IDoctorService {
             if (doctorRepository.findDoctorByUserUsername(user.getUsername()).isPresent()) {
                 throw new EntityAlreadyExistsException(Doctor.class, user.getUsername());
             }
-            user.setPassword(SecUtil.hashPassword(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             specialization = DoctorMapper.extractSpecializationFromDoctorRegisterDTO(dto);
             if (specializationRepository.findSpecializationBySpecializationName(
                     specialization.getSpecializationName()).isPresent()) {
@@ -197,6 +201,7 @@ public class DoctorServiceImpl implements IDoctorService {
 
             updatedUser = DoctorMapper.extractUserFromDoctorUpdateDTO(dto);
             updatedPersonalDetails = DoctorMapper.extractPersonalDetailsFromDoctorUpdateDTO(dto);
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
             updatedSpecialization = DoctorMapper.extractSpecializationFromDoctorUpdateDTO(dto);
             if (specializationRepository.findSpecializationBySpecializationName(
                     updatedSpecialization.getSpecializationName()).isPresent()) {

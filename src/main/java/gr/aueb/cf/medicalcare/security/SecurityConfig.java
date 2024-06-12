@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/user/**").permitAll()
                                 .requestMatchers("/api/doctor/**").permitAll()
                                 .requestMatchers("/api/user/register").permitAll()
+                                .requestMatchers("/api/specialization/all").permitAll()
                                 .requestMatchers("/api/medicine/**").hasAuthority(Role.ADMIN.name())
 //                              .requestMatchers("/admin/**").hasRole("ADMIN")
 //                              .requestMatchers("/doctor/**").hasRole("DOCTOR")

@@ -52,7 +52,7 @@ public class DoctorMapper {
      * @return      The User
      */
     public static User extractUserFromDoctorRegisterDTO(DoctorRegisterDTO dto) {
-        User user = User.getNewUserWithDoctorRole(dto.getUsername(), SecUtil.hashPassword(dto.getPassword()), dto.getEmail());
+        User user = User.getNewUserWithDoctorRole(dto.getUsername(), dto.getPassword(), dto.getEmail());
         user.setIsActive(true);
         return user;
     }
@@ -63,7 +63,7 @@ public class DoctorMapper {
      * @return      The User
      */
     public static User extractUserFromDoctorUpdateDTO(DoctorUpdateDTO dto) {
-        User user = User.getNewUserWithDoctorRole(dto.getUsername(), SecUtil.hashPassword(dto.getPassword()), dto.getEmail());
+        User user = User.getNewUserWithDoctorRole(dto.getUsername(), dto.getPassword(), dto.getEmail());
         user.setIsActive(true);
         return user;
     }

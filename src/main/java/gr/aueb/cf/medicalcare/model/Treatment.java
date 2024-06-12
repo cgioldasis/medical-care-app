@@ -12,9 +12,7 @@ import java.util.Set;
  * Extends the AbstractEntity class, inheriting common properties like an identifier.
  */
 @Entity
-@Table(name = "treatments", indexes = {
-        @Index(name = "treatment_name_index", columnList = "treatmentName", unique = true)
-})
+@Table(name = "treatments")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

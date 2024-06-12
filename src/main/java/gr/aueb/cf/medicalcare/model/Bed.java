@@ -9,9 +9,7 @@ import lombok.*;
  */
 
 @Entity
-@Table(name = "beds", indexes = {
-        @Index(name = "bed_number_index", columnList = "bedNumber", unique = true)
-})
+@Table(name = "beds")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
