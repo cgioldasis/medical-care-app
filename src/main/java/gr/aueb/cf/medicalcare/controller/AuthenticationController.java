@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,10 +32,6 @@ public class AuthenticationController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
         final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-
-        if (!(userDetails.getStatus().name().equals("APPROVED"))) {
-            throw new NotActiveUserException("User has not approved with username: " + authenticationRequest.getUsername());
-        }
 
         // Δημιουργεί JWT token
         final String jwt = jwtUtil.generateToken(userDetails);

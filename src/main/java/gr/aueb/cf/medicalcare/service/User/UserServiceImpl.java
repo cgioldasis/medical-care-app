@@ -1,9 +1,11 @@
 package gr.aueb.cf.medicalcare.service.User;
 
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
+import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
 import gr.aueb.cf.medicalcare.model.Role;
+import gr.aueb.cf.medicalcare.model.Status;
 import gr.aueb.cf.medicalcare.model.User;
 import gr.aueb.cf.medicalcare.repository.UserRepository;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,4 +179,37 @@ public class UserServiceImpl implements IUserService {
     public Long countUsersByRole(String role) {
         return userRepository.countByRole(Role.valueOf(role));
     }
+
+    public User updateUserStatus(UserStatusDTO dto) throws UserNotFoundException {
+        User user = userRepository.findById(dto.getId()).orElseThrow(() -> new UserNotFoundException("User with id: " + dto.getId() + " not found"));
+        user.setStatus(Status.valueOf(dto.getStatus()));
+        return userRepository.save(user);
+    }
+
+    /**
+     * Get all users status
+     * @return List<UserStatusDTO>
+     * @throws UserNotFoundException If any user exists.
+     */
+    public List<UserStatusDTO> getAllUsersStatus() throws UserNotFoundException {
+        List<User> users = new ArrayList<>();
+        List<UserStatusDTO> userStatusDTOS = new ArrayList<>();
+
+        try {
+            users = userRepository.findAll();
+            if (users.isEmpty()) {
+                throw new UserNotFoundException("No users found");
+            }
+            for (User user : users) {
+                userStatusDTOS.add(UserMapper.mapToUserStatusDTO(user));
+            }
+            log.info("All users status retrieved successfully at {}", LocalDateTime.now());
+            return userStatusDTOS;
+            } catch (UserNotFoundException e) {
+            log.error(e.getMessage());
+                throw e;
+            }
+    }
+
 }
+

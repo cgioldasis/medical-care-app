@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,7 +28,7 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
@@ -39,11 +40,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers("/api/authenticate").permitAll()
-                                .requestMatchers("/api/user/**").hasAnyAuthority(Role.DOCTOR.name(), Role.ADMIN.name())
-                                .requestMatchers("/api/doctor/**").hasAuthority(Role.DOCTOR.name())
+                                .requestMatchers("/api/user/**").hasAnyAuthority(Role.ADMIN.name())
+                                .requestMatchers("/api/user/user-status/all").hasAnyAuthority(Role.ADMIN.name())
+                                .requestMatchers("/api/doctor/**").permitAll()
                                 .requestMatchers("/api/user/register").permitAll()
                                 .requestMatchers("/api/specialization/all").permitAll()
-                                .requestMatchers("/api/medicine/**").hasAuthority(Role.ADMIN.name())
+                                .requestMatchers("/api/medicine/**").permitAll()
 //                              .requestMatchers("/admin/**").hasRole("ADMIN")
 //                              .requestMatchers("/doctor/**").hasRole("DOCTOR")
                                 .anyRequest().authenticated()

@@ -52,6 +52,7 @@ public class JwtUtil {
 
     private String createToken(String subject, String role) {
         return Jwts.builder()
+                .setSubject(subject)
                 .claim("username", subject)
                 .claim("role", role)
                 .setIssuedAt(new Date())

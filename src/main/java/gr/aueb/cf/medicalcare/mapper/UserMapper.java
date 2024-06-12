@@ -2,6 +2,7 @@ package gr.aueb.cf.medicalcare.mapper;
 
 import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
+import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.model.User;
 import gr.aueb.cf.medicalcare.util.SecUtil;
@@ -49,5 +50,9 @@ public class UserMapper {
      */
     public static UserReadOnlyDTO mapToUserReadOnlyDTO(User user) {
         return new UserReadOnlyDTO(user.getId(),user.getUsername(), user.getPassword(), user.getEmail());
+    }
+
+    public static UserStatusDTO mapToUserStatusDTO(User user) {
+        return new UserStatusDTO(user.getId(), user.getUsername(), user.getEmail(), user.getStatus().name());
     }
 }

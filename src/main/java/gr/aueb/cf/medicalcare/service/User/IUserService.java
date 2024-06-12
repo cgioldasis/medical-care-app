@@ -1,6 +1,7 @@
 package gr.aueb.cf.medicalcare.service.User;
 
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
+import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.model.User;
 
@@ -70,6 +71,13 @@ public interface IUserService {
      * @return                              The number of users with the given role
      */
     Long countUsersByRole(String role);
+
+    /**
+     * Get all users status
+     * @return List<UserStatusDTO>
+     * @throws UserNotFoundException If any user exists.
+     */
+    List<UserStatusDTO> getAllUsersStatus() throws UserNotFoundException;
 
 
 

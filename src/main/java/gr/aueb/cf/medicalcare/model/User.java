@@ -129,8 +129,4 @@ public class User extends AbstractEntity implements CustomUserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @Override
-    public Status getStatus() {
-        return status;
-    }
 }

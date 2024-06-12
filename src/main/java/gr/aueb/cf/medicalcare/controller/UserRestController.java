@@ -3,6 +3,7 @@ package gr.aueb.cf.medicalcare.controller;
 import gr.aueb.cf.medicalcare.dto.ResponseMessage;
 import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
+import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
 import gr.aueb.cf.medicalcare.model.User;
@@ -242,6 +243,16 @@ public class UserRestController {
             return ResponseEntity.ok(new ResponseMessage("Email is available."));
         } else {
             return ResponseEntity.badRequest().body(new ResponseMessage("Email is already taken!"));
+        }
+    }
+
+    @GetMapping("/user-status/all")
+    public ResponseEntity<List<UserStatusDTO>> getUsersStatus() throws UserNotFoundException {
+        try{
+            List<UserStatusDTO> userStatusDTOS = userService.getAllUsersStatus();
+            return new ResponseEntity<>(userStatusDTOS, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            throw e;
         }
     }
 }
