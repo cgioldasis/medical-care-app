@@ -1,10 +1,7 @@
 package gr.aueb.cf.medicalcare.controller;
 
 import gr.aueb.cf.medicalcare.dto.ResponseMessage;
-import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
-import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
-import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
-import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
+import gr.aueb.cf.medicalcare.dto.user.*;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
 import gr.aueb.cf.medicalcare.model.User;
 import gr.aueb.cf.medicalcare.repository.UserRepository;
@@ -251,6 +248,31 @@ public class UserRestController {
         try{
             List<UserStatusDTO> userStatusDTOS = userService.getAllUsersStatus();
             return new ResponseEntity<>(userStatusDTOS, HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            throw e;
+        }
+    }
+
+    @PutMapping("/user-status/update/{id}")
+    public ResponseEntity<UserStatusDTO> updateUserStatus(@PathVariable("id") Long id,
+                                                          @RequestBody UserUpdateStatusDTO dto) throws UserNotFoundException {
+        try {
+
+            User user = userService.getUserById(id);
+
+            // prevent updating different user than the requester
+            if (!Objects.equals(id, dto.getId())) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            // prevent updating the status of the admin user
+            if (user.getUsername().equals("admin")) {
+                throw new RuntimeException("Unauthorized");
+            }
+
+             user = userService.updateUserStatus(dto);
+            UserStatusDTO userStatusDTO = UserMapper.mapToUserStatusDTO(user);
+            return new ResponseEntity<>(userStatusDTO, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             throw e;
         }

@@ -3,6 +3,7 @@ package gr.aueb.cf.medicalcare.service.User;
 import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
 import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
+import gr.aueb.cf.medicalcare.dto.user.UserUpdateStatusDTO;
 import gr.aueb.cf.medicalcare.mapper.UserMapper;
 import gr.aueb.cf.medicalcare.model.Role;
 import gr.aueb.cf.medicalcare.model.Status;
@@ -180,7 +181,7 @@ public class UserServiceImpl implements IUserService {
         return userRepository.countByRole(Role.valueOf(role));
     }
 
-    public User updateUserStatus(UserStatusDTO dto) throws UserNotFoundException {
+    public User updateUserStatus(UserUpdateStatusDTO dto) throws UserNotFoundException {
         User user = userRepository.findById(dto.getId()).orElseThrow(() -> new UserNotFoundException("User with id: " + dto.getId() + " not found"));
         user.setStatus(Status.valueOf(dto.getStatus()));
         return userRepository.save(user);

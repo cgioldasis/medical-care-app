@@ -1,9 +1,6 @@
 package gr.aueb.cf.medicalcare.mapper;
 
-import gr.aueb.cf.medicalcare.dto.user.UserReadOnlyDTO;
-import gr.aueb.cf.medicalcare.dto.user.UserRegisterDTO;
-import gr.aueb.cf.medicalcare.dto.user.UserStatusDTO;
-import gr.aueb.cf.medicalcare.dto.user.UserUpdateDTO;
+import gr.aueb.cf.medicalcare.dto.user.*;
 import gr.aueb.cf.medicalcare.model.User;
 import gr.aueb.cf.medicalcare.util.SecUtil;
 
