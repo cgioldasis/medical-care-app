@@ -1,5 +1,6 @@
 package gr.aueb.cf.medicalcare.mapper;
 
+import gr.aueb.cf.medicalcare.dto.doctor.DoctorForAdminListDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorUpdateDTO;
@@ -97,5 +98,12 @@ public class DoctorMapper {
                 doctor.getPersonalDetails().getLastname(), doctor.getPersonalDetails().getSsid(),
                 doctor.getSpecialization().getSpecializationName(), doctor.getSpecialization().getDescription(),
                 doctor.getPersonalDetails().getGender(), doctor.getPersonalDetails().getPhone());
+    }
+
+    public static DoctorForAdminListDTO extractDoctorForAdminListDTOFromDoctor(Doctor doctor) {
+        return new DoctorForAdminListDTO(doctor.getId(), doctor.getUser().getUsername(),
+                doctor.getUser().getEmail(),doctor.getPersonalDetails().getFirstname(),doctor.getPersonalDetails()
+                .getLastname(),doctor.getPersonalDetails().getSsid(),doctor.getSpecialization().getSpecializationName(),
+                doctor.getPersonalDetails().getPhone());
     }
 }

@@ -246,7 +246,11 @@ public class UserRestController {
     @GetMapping("/user-status/all")
     public ResponseEntity<List<UserStatusDTO>> getUsersStatus() throws UserNotFoundException {
         try{
-            List<UserStatusDTO> userStatusDTOS = userService.getAllUsersStatus();
+            List<User> users = userService.getAllUsers();
+            List<UserStatusDTO> userStatusDTOS = new ArrayList<>();
+            for (User user : users) {
+                userStatusDTOS.add(UserMapper.mapToUserStatusDTO(user));
+            }
             return new ResponseEntity<>(userStatusDTOS, HttpStatus.OK);
         } catch (UserNotFoundException e) {
             throw e;

@@ -151,6 +151,7 @@ public class UserServiceImpl implements IUserService {
      * @throws UserNotFoundException        If the user is not found
      */
     @Override
+    @Transactional
     public User deleteUser(Long id) throws UserNotFoundException {
         User user;
         try {
@@ -181,17 +182,7 @@ public class UserServiceImpl implements IUserService {
         return userRepository.countByRole(Role.valueOf(role));
     }
 
-    public User updateUserStatus(UserUpdateStatusDTO dto) throws UserNotFoundException {
-        User user = userRepository.findById(dto.getId()).orElseThrow(() -> new UserNotFoundException("User with id: " + dto.getId() + " not found"));
-        user.setStatus(Status.valueOf(dto.getStatus()));
-        return userRepository.save(user);
-    }
-
-    /**
-     * Get all users status
-     * @return List<UserStatusDTO>
-     * @throws UserNotFoundException If any user exists.
-     */
+    @Override
     public List<UserStatusDTO> getAllUsersStatus() throws UserNotFoundException {
         List<User> users = new ArrayList<>();
         List<UserStatusDTO> userStatusDTOS = new ArrayList<>();
@@ -205,12 +196,21 @@ public class UserServiceImpl implements IUserService {
                 userStatusDTOS.add(UserMapper.mapToUserStatusDTO(user));
             }
             log.info("All users status retrieved successfully at {}", LocalDateTime.now());
+            userStatusDTOS.forEach(userStatusDTO -> log.info("User status: {}", userStatusDTO));
             return userStatusDTOS;
             } catch (UserNotFoundException e) {
             log.error(e.getMessage());
                 throw e;
             }
     }
+
+    @Override
+    public User updateUserStatus(UserUpdateStatusDTO dto) throws UserNotFoundException {
+         User user = userRepository.findById(dto.getId()).orElseThrow(() -> new UserNotFoundException("User with id: " + dto.getId() + " not found"));
+        user.setStatus(Status.valueOf(dto.getStatus()));
+        return userRepository.save(user);
+    }
+
 
 }
 

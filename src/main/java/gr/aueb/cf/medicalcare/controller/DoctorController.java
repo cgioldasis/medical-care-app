@@ -1,5 +1,6 @@
 package gr.aueb.cf.medicalcare.controller;
 
+import gr.aueb.cf.medicalcare.dto.doctor.DoctorForAdminListDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorReadOnlyDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorRegisterDTO;
 import gr.aueb.cf.medicalcare.dto.doctor.DoctorUpdateDTO;
@@ -287,5 +288,29 @@ public class DoctorController {
     public ResponseEntity<Long> countDoctorsBySpecialization(@PathVariable("specializationName")
                                                                  String specializationName)      {
         return ResponseEntity.ok(doctorService.countDoctorsBySpecialization(specializationName));
+    }
+
+    @Operation(summary = "Get all doctors for admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Doctors found",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DoctorForAdminListDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Doctors not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Service Unavailable",
+                    content = @Content)})
+    @GetMapping("/admin-list")
+    public ResponseEntity<List<DoctorForAdminListDTO>> getAllDoctorsForAdmin() throws DoctorNotFoundException {
+        List<Doctor> doctors;
+        try {
+            doctors = doctorService.getAllDoctors();
+            List<DoctorForAdminListDTO> doctorForAdminListDTOS = new ArrayList<>();
+            for (Doctor doctor : doctors) {
+                doctorForAdminListDTOS.add(DoctorMapper.extractDoctorForAdminListDTOFromDoctor(doctor));
+            }
+            return ResponseEntity.ok(doctorForAdminListDTOS);
+        } catch (DoctorNotFoundException e) {
+            throw e;
+        }
     }
 }
