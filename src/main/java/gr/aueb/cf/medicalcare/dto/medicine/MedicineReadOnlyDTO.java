@@ -13,7 +13,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class MedicineReadOnlyDTO extends BaseDTO {
-
     // The name of the medicine.
     private String medicineName;
     // The active substance of the medicine.
