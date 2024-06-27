@@ -30,7 +30,7 @@ public class Medicine extends AbstractEntity {
     private String medicineName;
 
     //  The active substance of the medicine.
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String activeSubstance;
 
     //  The manufacturer of the medicine.
