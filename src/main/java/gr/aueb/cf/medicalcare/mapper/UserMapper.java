@@ -2,7 +2,6 @@ package gr.aueb.cf.medicalcare.mapper;
 
 import gr.aueb.cf.medicalcare.dto.user.*;
 import gr.aueb.cf.medicalcare.model.User;
-import gr.aueb.cf.medicalcare.util.SecUtil;
 
 /**
  * Mapper class for User objects
@@ -35,7 +34,7 @@ public class UserMapper {
      */
     public static User updateUserMapper(UserUpdateDTO dto, User user) {
         user.setUsername(dto.getUsername());
-        user.setPassword(SecUtil.hashPassword(dto.getPassword()));
+        user.setPassword(dto.getPassword());
         user.setEmail(dto.getEmail());
         return user;
     }

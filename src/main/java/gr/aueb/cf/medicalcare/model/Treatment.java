@@ -30,7 +30,6 @@ public class Treatment extends AbstractEntity {
 
     //  The medicines used in the treatment.
     @ManyToMany
-    @Getter(AccessLevel.PROTECTED)
     @JoinTable(
             name = "treatment_medicines",
             joinColumns = @JoinColumn(name = "treatment_id", referencedColumnName = "id"),
@@ -56,7 +55,7 @@ public class Treatment extends AbstractEntity {
 //    private Long duration = Duration.between(endTreatment, startTreatment).toDays();
 
     //  The patient receiving the treatment.
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.LAZY)
     private Patient patient;
 
     public Treatment(@NonNull String treatmentName, @NonNull LocalDate startTreatment, @NonNull LocalDate endTreatment) {
@@ -71,4 +70,16 @@ public class Treatment extends AbstractEntity {
         medicine.getTreatments().add(this);
     }
 
+    public void addDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        doctor.getTreatments().add(this);
+    }
+
+    public void addPatient(Patient patient) {
+        this.patient = patient;
+        patient.setTreatment(this);
+    }
+
+    public void setStartDate(LocalDate startDate) {
+    }
 }

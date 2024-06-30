@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Set;
-
+/**
+ * Data Transfer Object for the Treatment entity.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,8 +22,8 @@ public class TreatmentRegisterDTO {
     private String treatmentName;
     // The SSID of the doctor prescribing the treatment.
     @NotNull
-    private String doctorSsid;
-    // The start date of the treatment.
+    private String patientSsid;
+    // The SSID of the doctor prescribing the treatment.
     private LocalDate startDate;
     // The end date of the treatment.
     @NotNull

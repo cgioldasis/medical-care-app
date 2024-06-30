@@ -67,7 +67,7 @@ public class MedicineServiceImpl implements IMedicineService{
             if (medicineRepository.findMedicineByMedicineName(dto.getMedicineName()).isPresent()) {
                 throw new EntityAlreadyExistsException(Medicine.class, dto.getMedicineName());
             }
-            medicine = MedicineMapper.mapMedicineDTOToMedicine(dto);
+            medicine = MedicineMapper.mapMedicineInsertDTOToMedicine(dto);
             medicineRepository.save(medicine);
             log.info("Medicine with name: {} added successfully.", dto.getMedicineName());
             return medicine;
@@ -87,7 +87,7 @@ public class MedicineServiceImpl implements IMedicineService{
     public Medicine updateMedicine(MedicineUpdateDTO dto) {
         Medicine medicine;
         try {
-            medicine = MedicineMapper.mapMedicineDTOToMedicine(dto);
+            medicine = MedicineMapper.mapMedicineUpdateDTOToMedicine(dto);
             medicineRepository.save(medicine);
             log.info("Medicine with name: {} updated successfully.", dto.getMedicineName());
             return medicine;

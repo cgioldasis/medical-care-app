@@ -12,4 +12,5 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     Optional<Patient> findPatientByPersonalDetailsSsid(String ssid);
     List<Patient> findPatientByDoctorPersonalDetailsLastname(String lastname);
     List<Patient> findPatientByTreatmentTreatmentName(String treatmentName);
+    List<Patient> findPatientByDoctorUserUsername(String username);
 }

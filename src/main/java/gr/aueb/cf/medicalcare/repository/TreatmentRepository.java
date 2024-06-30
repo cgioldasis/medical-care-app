@@ -19,4 +19,6 @@ public interface TreatmentRepository extends JpaRepository<Treatment, Long> {
     @Query("SELECT t From Treatment t JOIN t.doctor d where d.personalDetails = (" +
             "select p from PersonalDetails p where p.ssid = :ssid)")
     List<Treatment> findTreatmentsByDoctorPersonalDetailsLastname(@Param("ssid") String ssid);
+
+    Optional<Treatment> findTreatmentByPatientPersonalDetailsSsid(String ssid);
 }

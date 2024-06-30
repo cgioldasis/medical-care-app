@@ -8,7 +8,6 @@ import gr.aueb.cf.medicalcare.model.Doctor;
 import gr.aueb.cf.medicalcare.model.PersonalDetails;
 import gr.aueb.cf.medicalcare.model.Specialization;
 import gr.aueb.cf.medicalcare.model.User;
-import gr.aueb.cf.medicalcare.util.SecUtil;
 
 import java.util.Date;
 

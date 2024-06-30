@@ -10,7 +10,7 @@ import java.util.Date;
  * Extends the AbstractEntity class, inheriting common properties like an identifier.
  */
 @Entity
-@Table(name = "personal-details")
+@Table(name = "personal_details")
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor

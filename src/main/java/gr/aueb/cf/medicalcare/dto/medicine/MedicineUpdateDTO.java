@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
-
+/**
+ * A DTO class that represents a medicine with read-only access.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

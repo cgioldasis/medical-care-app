@@ -9,7 +9,6 @@ import gr.aueb.cf.medicalcare.model.Specialization;
 import gr.aueb.cf.medicalcare.model.User;
 import gr.aueb.cf.medicalcare.repository.DoctorRepository;
 import gr.aueb.cf.medicalcare.repository.SpecializationRepository;
-import gr.aueb.cf.medicalcare.util.SecUtil;
 import gr.aueb.cf.medicalcare.service.exception.DoctorNotFoundException;
 import gr.aueb.cf.medicalcare.service.exception.EntityAlreadyExistsException;
 import gr.aueb.cf.medicalcare.service.exception.UserNotFoundException;

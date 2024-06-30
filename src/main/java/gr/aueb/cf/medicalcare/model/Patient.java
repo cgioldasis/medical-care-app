@@ -38,10 +38,10 @@ public class Patient extends AbstractEntity {
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private Doctor doctor;
 
-    //  Bed assigned to the patient.
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
-    @JoinColumn(name = "bed_id", referencedColumnName = "id")
-    private Bed bed;
+//    //  Bed assigned to the patient.
+//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = false)
+//    @JoinColumn(name = "bed_id", referencedColumnName = "id")
+//    private Bed bed;
 
 //    //  Admission details of the patient.
 //    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -49,6 +49,17 @@ public class Patient extends AbstractEntity {
 //    private Admission admission;
 
     //  Treatment details for the patient.
-    @OneToOne(mappedBy = "patient")
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Treatment treatment;
+
+    public void addPersonalDetails(PersonalDetails personalDetails) {
+        this.personalDetails = personalDetails;
+        personalDetails.setPatient(this);
+    }
+
+    public void addDoctor(Doctor doctor) {
+        this.doctor = doctor;
+        doctor.getPatients().add(this);
+    }
+
 }
