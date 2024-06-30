@@ -1,5 +1,6 @@
 # medical-care-app
 
+The application represents a simple form of a hospital application where a doctor can register a patient and administer treatments with medications. An ADMIN also has access to approve other admins and doctors, delete them, and at the same time be able to enter medications and view the list of all patients.
 
 
 ## Features
@@ -14,6 +15,7 @@ As a doctor, you can see the list of your patients and also can add treatment fo
 
 - The delete treatment button is not working properly yet.
 - The users and doctors cant change their personal information yet.
+- I dont implement well the swagger yet, i ll do it in the future.
 
 
 ## Technologies
